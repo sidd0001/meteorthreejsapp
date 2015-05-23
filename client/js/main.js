@@ -63,7 +63,7 @@ Template.ThreeJsCanvas.rendered = function() {
 	
 	var x = -1;
 	
-	todo uncomment after inserting data
+	//todo uncomment after inserting data
 	/*for (var key in objPlanes) {
 		var mixerPlane	= THREEx.HtmlMixer.createPlaneFromIframe(mixerContext, objPlanes[key].url)
 		mixerPlane.object3d.position.set(x,.5,0);

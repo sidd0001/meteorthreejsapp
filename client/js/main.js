@@ -75,7 +75,7 @@ Template.ThreeJsCanvas.rendered = function() {
 	// create the iframe element
 	var mixerPlane	= THREEx.HtmlMixer.createPlaneFromIframe(mixerContext, 'http://threejs.org')
 	mixerPlane.object3d.position.set(-1,.5,0);
-	mixerPlane.object3d.scale.multiplyScalar(.25);
+	//mixerPlane.object3d.scale.multiplyScalar(.25);
 	scene.add(mixerPlane.object3d)
 
 

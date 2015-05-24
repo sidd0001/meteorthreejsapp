@@ -1,11 +1,37 @@
-Template.ThreeJsCanvas.rendered = function() {
+function random (low, high) {
+    return Math.random() * (high - low) + low;
+}
 
+var renderer;
+var scene;
+var prevobjectCount;
+
+function clearScene(){
+	if(typeof(scene) === 'undefined')
+	{
+		return;
+	}
+    var children = scene.children;
+    for(var i = children.length-1;i>=0;i--){
+        var child = children[i];
+        scene.remove(child);
+    };
+};
+
+Template.ThreeJsCanvas.helpers({
+  planes: function () {
+	  
+	var objPlanes = Planes.find().fetch();
+	
+	clearScene();
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Comment								//
 	//////////////////////////////////////////////////////////////////////////////////
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
 	
 	var DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
-	var renderer	= new THREE.WebGLRenderer({
+	renderer	= new THREE.WebGLRenderer({
 		alpha	: true, devicePixelRatio: DPR
 	});
 	renderer.setClearColor(new THREE.Color('black'), 0)
@@ -13,8 +39,8 @@ Template.ThreeJsCanvas.rendered = function() {
 	document.body.appendChild( renderer.domElement );
 
 	var onRenderFcts	= [];
-	var scene	= new THREE.Scene();
-	var camera	= new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000 );
+	scene	= new THREE.Scene();
+	var camera	= new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	camera.position.z = 1
 	
 
@@ -58,26 +84,15 @@ Template.ThreeJsCanvas.rendered = function() {
 	//		create a Plane for THREEx.HtmlMixer				//
 	//////////////////////////////////////////////////////////////////////////////////
 	
-	
-	var objPlanes = Planes.find().fetch();
-	
-	var x = -1;
-	
-	//todo uncomment after inserting data
-	/*for (var key in objPlanes) {
+
+	for (var key in objPlanes) {
 		var mixerPlane	= THREEx.HtmlMixer.createPlaneFromIframe(mixerContext, objPlanes[key].url)
-		mixerPlane.object3d.position.set(x,.5,0);
-		mixerPlane.object3d.scale.multiplyScalar(.25);
+		var x = random(-0.9, 0.9);
+		var y = random(-0.5, 0.5);
+		mixerPlane.object3d.position.set(x,y,0);
+		mixerPlane.object3d.scale.multiplyScalar(.5);
 		scene.add(mixerPlane.object3d)
-		x = x + .25;
-	}*/
-
-	// create the iframe element
-	var mixerPlane	= THREEx.HtmlMixer.createPlaneFromIframe(mixerContext, 'http://threejs.org')
-	mixerPlane.object3d.position.set(-1,.5,0);
-	//mixerPlane.object3d.scale.multiplyScalar(.25);
-	scene.add(mixerPlane.object3d)
-
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		handle resize							//
@@ -131,7 +146,8 @@ Template.ThreeJsCanvas.rendered = function() {
 			onRenderFct(deltaMsec/1000, nowMsec/1000)
 		})
 	})
-}
+  }
+});
 
 Template.UrlForm.events({
     'submit form': function(event){
@@ -142,3 +158,4 @@ Template.UrlForm.events({
       });
     }
   });
+  
